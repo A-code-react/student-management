@@ -1,0 +1,90 @@
+{
+  "students": [
+    {
+      "name": "Ambika",
+      "dob": "2011-01-09",
+      "department": "Science",
+      "subjects": {
+        "English": 99,
+        "Mother Tongue": 99,
+        "Physics": 99,
+        "Chemistry": 99,
+        "Mathematics": 99,
+        "Biology": 98
+      },
+      "age": "15Y 2M 1D",
+      "totalMarks": 593,
+      "percentage": 98.83333333333333,
+      "id": "f4c1"
+    },
+    {
+      "id": "73cb",
+      "name": "Sarika",
+      "dob": "2011-01-27",
+      "department": "Arts",
+      "subjects": {
+        "English": 99,
+        "Mother Tongue": 98,
+        "History": 96,
+        "Political Science": 98,
+        "Geography": 97,
+        "Sociology": 97
+      },
+      "age": "15Y 1M 10D",
+      "totalMarks": 585,
+      "percentage": 97.5
+    },
+    {
+      "id": "f0e0",
+      "name": "Mukta",
+      "dob": "2011-06-08",
+      "department": "Commerce",
+      "subjects": {
+        "English": 98,
+        "Mother Tongue": 99,
+        "Accountancy": 77,
+        "Business Studies": 98,
+        "Economics": 88,
+        "Mathematics": 89
+      },
+      "age": "14Y 9M 1D",
+      "totalMarks": 549,
+      "percentage": 91.5
+    },
+    {
+      "id": "4d9c",
+      "name": "Yogesh",
+      "dob": "2010-06-16",
+      "department": "Science",
+      "subjects": {
+        "English": 92,
+        "Mother Tongue": 93,
+        "Physics": 98,
+        "Chemistry": 91,
+        "Mathematics": 90,
+        "Biology": 94
+      },
+      "age": "15Y 8M 21D",
+      "totalMarks": 558,
+      "percentage": 93
+    },
+    {
+      "id": "15fc",
+      "name": "hari",
+      "dob": "2010-03-17",
+      "department": "Science",
+      "subjects": {
+        "English": 92,
+        "Mother Tongue": 92,
+        "Physics": 92,
+        "Chemistry": 92,
+        "Mathematics": 92,
+        "Biology": 92
+      },
+      "age": "15Y 11M 21D",
+      "totalMarks": 552,
+      "percentage": 92
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

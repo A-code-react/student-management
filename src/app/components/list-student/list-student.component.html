@@ -1,0 +1,104 @@
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between mb-3">
+        <h3>Student List</h3>
+        <input type="text" class="form-control" placeholder="Search student..." style="width:200px"
+            [(ngModel)]="searchText" (input)="applyFilters()" />
+        <select class="form-select" style="width:200px" [(ngModel)]="selectedDepartment" (change)="filterDepartment()">
+            <option value="">All Departments</option>
+            <option value="Science">Science</option>
+            <option value="Commerce">Commerce</option>
+            <option value="Arts">Arts</option>
+        </select>
+        <a routerLink="/add-student" class="btn btn-success">
+            Add Student
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped text-center">
+
+        <thead class="table-dark">
+            <tr>
+                <th (click)="sortStudents('name')" style="cursor:pointer"> Name ⬍ </th>
+                <th>Department</th>
+                <th (click)="sortStudents('age')" style="cursor:pointer"> Age ⬍ </th>
+                <th>Total Marks</th>
+                <th>Percentage</th>
+                <th colspan="2"> Actions </th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <ng-container *ngFor="let student of filteredStudents; let i = index">
+
+             <tr [class.dim-row]="selectedStudentId && selectedStudentId !== student.id">
+
+<td [ngClass]="getMedalClass(student)">
+{{student.name}} {{getMedal(student)}}
+</td>
+
+<td>{{student.department}}</td>
+
+<td>{{student.age}}</td>
+
+<td class="text-primary fw-bold cursor-pointer"
+(click)="toggleDetails(student)">
+{{student.totalMarks}} / 600
+</td>
+
+<td>{{student.percentage}} %</td>
+
+<td>
+<a class="btn btn-primary btn-sm"
+[routerLink]="['/edit-student', student.id]">
+Edit
+</a>
+</td>
+
+<td>
+<button class="btn btn-danger btn-sm"
+(click)="deleteStudent(student.id)">
+Delete
+</button>
+</td>
+
+</tr>
+
+                <!-- Nested Subject Table -->
+                <tr *ngIf="selectedStudentId === student.id">
+
+                    <td colspan="7">
+
+                        <table class="table table-sm table-bordered mt-2">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Marks</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr *ngFor="let subject of student.subjects | keyvalue">
+
+                                    <td>{{subject.key}}</td>
+                                    <td>{{subject.value}} /100</td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </td>
+
+                </tr>
+
+            </ng-container>
+
+        </tbody>
+    </table>
+
+</div>

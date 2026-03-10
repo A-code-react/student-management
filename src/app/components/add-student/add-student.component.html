@@ -1,0 +1,151 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Add 11th Standard Student</h2>
+
+    <a routerLink="/list-student" class="btn btn-primary"> View Students </a>
+  </div>
+
+  <form [formGroup]="studentForm" (ngSubmit)="addStudent()">
+    <!-- Student Details -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-semibold">Student Name</label>
+
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter student name"
+          formControlName="name"
+        />
+
+        <div
+          class="text-danger mt-1"
+          *ngIf="
+            studentForm.get('name')?.touched && studentForm.get('name')?.invalid
+          "
+        >
+          Name is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-semibold">Department</label>
+
+        <select class="form-select" formControlName="department">
+          <option value="">Select Department</option>
+          <option value="Science">Science</option>
+          <option value="Commerce">Commerce</option>
+          <option value="Arts">Arts</option>
+        </select>
+
+        <div
+          class="text-danger mt-1"
+          *ngIf="
+            studentForm.get('department')?.touched &&
+            studentForm.get('department')?.invalid
+          "
+        >
+          Department is required
+        </div>
+      </div>
+    </div>
+
+    <!-- DOB -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label fw-semibold">Date of Birth</label>
+
+        <input type="date" class="form-control" formControlName="dob" />
+      </div>
+
+      <div class="col-md-6 d-flex align-items-end">
+        <div class="alert alert-info w-100 mb-3">
+          Age: {{ ageYears }} Years {{ ageMonths }} Months {{ ageDays }} Days
+        </div>
+      </div>
+    </div>
+
+    <!-- Age Validation -->
+    <div *ngIf="ageError" class="alert alert-danger">
+      {{ ageError }}
+    </div>
+
+    <!-- SUBJECT MARKS -->
+    <h4 class="mt-4 mb-3">Subject Marks</h4>
+
+    <div *ngIf="subjects.length" formGroupName="subjects">
+      <div class="row">
+        <div class="col-md-4 mb-3" *ngFor="let subject of subjects">
+          <label class="form-label fw-semibold">{{ subject }}</label>
+
+          <input
+            type="number"
+            class="form-control"
+            [formControlName]="subject"
+            placeholder="Marks out of 100"
+          />
+          <div class="text-danger">
+            <div
+              *ngIf="
+                studentForm.get('subjects')?.get(subject)?.touched &&
+                studentForm.get('subjects')?.get(subject)?.invalid
+              "
+            >
+              <div
+                *ngIf="
+                  studentForm.get('subjects')?.get(subject)?.errors?.[
+                    'required'
+                  ]
+                "
+              >
+                Marks are required
+              </div>
+              <div
+                *ngIf="
+                  studentForm.get('subjects')?.get(subject)?.errors?.['min'] ||
+                  studentForm.get('subjects')?.get(subject)?.errors?.['max']
+                "
+              >
+                Marks must be between 0 and 100
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="row mt-3">
+      <div class="col-md-6">
+        <div class="alert alert-success">
+          Total Marks: <strong>{{ totalMarks }}</strong>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="alert alert-primary">
+          Percentage: <strong>{{ percentage | number: "1.2-2" }} %</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="mt-4 d-flex gap-3">
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="studentForm.invalid || ageError"
+      >
+        {{ isEditMode ? "Update Student" : "Add Student" }}
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-secondary px-4"
+        routerLink="/list-student"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,25 @@
+.gold {
+    font-weight: bold;
+
+}
+
+.silver {
+    font-weight: bold;
+
+}
+.bronze {
+
+    font-weight: bold;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.dim-row {
+    opacity: 0.4;
+}
+
+.table-sm td {
+    padding: 6px;
+}
