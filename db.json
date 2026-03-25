@@ -4,24 +4,36 @@
       "name": "Ambika",
       "dob": "2011-01-09",
       "department": "Science",
+      "gender": "Female 👩",
+      "stateId": 1,
+      "districtId": 26,
+      "activities": [
+        "Sports"
+      ],
+      "photo": "https://i.pinimg.com/564x/1a/33/64/1a33644d1fe495fc13af4e6aebc3e83a.jpg",
       "subjects": {
         "English": 99,
         "Mother Tongue": 99,
         "Physics": 99,
         "Chemistry": 99,
-        "Mathematics": 99,
+        "Mathematics": 100,
         "Biology": 98
       },
-      "age": "15Y 2M 1D",
-      "totalMarks": 593,
-      "percentage": 98.83333333333333,
-      "id": "f4c1"
+      "age": "15Y 2M 7D",
+      "totalMarks": 594,
+      "percentage": 99 
     },
     {
-      "id": "73cb",
       "name": "Sarika",
       "dob": "2011-01-27",
       "department": "Arts",
+      "gender": "Female 👩",
+      "stateId": "1",
+      "districtId": "7",
+      "activities": [
+        "Sports"
+      ],
+      "photo": "https://i.pinimg.com/736x/1d/e7/4f/1de74f10a45809b1b6f08090e7daa8ca.jpg",
       "subjects": {
         "English": 99,
         "Mother Tongue": 98,
@@ -30,15 +42,15 @@
         "Geography": 97,
         "Sociology": 97
       },
-      "age": "15Y 1M 10D",
+      "age": "15Y 1M 15D",
       "totalMarks": 585,
-      "percentage": 97.5
+      "percentage": 97.5 
     },
-    {
-      "id": "f0e0",
+    { 
       "name": "Mukta",
       "dob": "2011-06-08",
       "department": "Commerce",
+      "gender": "Female 👩",
       "subjects": {
         "English": 98,
         "Mother Tongue": 99,
@@ -51,8 +63,7 @@
       "totalMarks": 549,
       "percentage": 91.5
     },
-    {
-      "id": "4d9c",
+    { 
       "name": "Yogesh",
       "dob": "2010-06-16",
       "department": "Science",
@@ -68,22 +79,973 @@
       "totalMarks": 558,
       "percentage": 93
     },
-    {
-      "id": "15fc",
-      "name": "hari",
-      "dob": "2010-03-17",
+    { 
+      "name": "Amruta",
+      "dob": "2011-01-12",
       "department": "Science",
+      "stateId": "1",
+      "districtId": "32",
+      "subjects": {
+        "English": 98,
+        "Mother Tongue": 90,
+        "Physics": 90,
+        "Chemistry": 91,
+        "Mathematics": 89,
+        "Biology": 100
+      },
+      "age": "15Y 2M 0D",
+      "totalMarks": 558,
+      "percentage": 93
+    },
+    { 
+      "name": "Mahesh",
+      "dob": "2010-01-01",
+      "department": "Commerce",
+      "stateId": "1",
+      "districtId": "5",
+      "subjects": {
+        "English": 89,
+        "Mother Tongue": 98,
+        "Accountancy": 89,
+        "Business Studies": 89,
+        "Economics": 98,
+        "Mathematics": 80
+      },
+      "age": "16Y 2M 12D",
+      "totalMarks": 543,
+      "percentage": 90.5
+    },
+    { 
+      "name": "Farhana",
+      "dob": "2010-06-16",
+      "department": "Science",
+      "gender": "Female 👩",
+      "subjects": {
+        "English": 82,
+        "Mother Tongue": 93,
+        "Physics": 98,
+        "Chemistry": 91,
+        "Mathematics": 80,
+        "Biology": 94
+      },
+      "age": "15Y 8M 21D",
+      "totalMarks": 538,
+      "percentage": 89.67
+    },
+    { 
+      "name": "Naresh",
+      "dob": "2011-12-07",
+      "department": "Arts",
+      "stateId": "1",
+      "districtId": "10",
+      "subjects": {
+        "English": 94,
+        "Mother Tongue": 78,
+        "History": 87,
+        "Political Science": 89,
+        "Geography": 90,
+        "Sociology": 99
+      },
+      "age": "14Y 3M 6D",
+      "totalMarks": 537,
+      "percentage": 89.5
+    },
+    { 
+      "name": "Suresh",
+      "dob": "2011-01-01",
+      "department": "Science",
+      "gender": "Male 👨",
+      "stateId": "2",
+      "districtId": "16",
+      "subjects": {
+        "English": 69,
+        "Mother Tongue": 90,
+        "Physics": 57,
+        "Chemistry": 67,
+        "Mathematics": 78,
+        "Biology": 85
+      },
+      "age": "15Y 2M 12D",
+      "totalMarks": 446,
+      "percentage": 74.33333333333333
+    },
+    { 
+      "name": "Riddhi",
+      "dob": "2010-12-31",
+      "department": "Commerce",
+      "stateId": "2",
+      "districtId": "29",
+      "subjects": {
+        "English": 89,
+        "Mother Tongue": 97,
+        "Accountancy": 67,
+        "Business Studies": 76,
+        "Economics": 87,
+        "Mathematics": 87
+      },
+      "age": "15Y 2M 10D",
+      "totalMarks": 503,
+      "percentage": 83.83333333333334
+    },
+    { 
+      "name": "Siddhi",
+      "dob": "2011-01-01",
+      "department": "Arts",
+      "stateId": "1",
+      "districtId": "3",
+      "subjects": {
+        "English": 55,
+        "Mother Tongue": 98,
+        "History": 98,
+        "Political Science": 78,
+        "Geography": 88,
+        "Sociology": 78
+      },
+      "age": "15Y 2M 12D",
+      "totalMarks": 495,
+      "percentage": 82.5
+    },
+    { 
+      "name": "Arbaj",
+      "dob": "2010-07-13",
+      "department": "Arts",
+      "gender": "Male 👨",
+      "stateId": "2",
+      "districtId": "24",
+      "subjects": {
+        "English": 67,
+        "Mother Tongue": 87,
+        "History": 95,
+        "Political Science": 87,
+        "Geography": 59,
+        "Sociology": 80
+      },
+      "age": "15Y 8M 0D",
+      "totalMarks": 475,
+      "percentage": 79.16666666666666
+    },
+    { 
+      "name": "Varun",
+      "dob": "2010-08-01",
+      "department": "Commerce",
+      "stateId": "1",
+      "districtId": "29",
+      "subjects": {
+        "English": 74,
+        "Mother Tongue": 78,
+        "Accountancy": 67,
+        "Business Studies": 65,
+        "Economics": 98,
+        "Mathematics": 45
+      },
+      "age": "15Y 7M 12D",
+      "totalMarks": 427,
+      "percentage": 71.16666666666667
+    },
+    { 
+      "name": "Yukti",
+      "dob": "2011-02-28",
+      "department": "Arts",
+      "stateId": "1",
+      "districtId": "6",
+      "activities": [
+        "Debate",
+        "Art"
+      ],
+      "subjects": {
+        "English": 88,
+        "Mother Tongue": 89,
+        "History": 99,
+        "Political Science": 90,
+        "Geography": 87,
+        "Sociology": 91
+      },
+      "age": "15Y 0M 13D",
+      "totalMarks": 544,
+      "percentage": 90.66666666666666
+    },
+    { 
+      "name": "Mohini",
+      "dob": "2010-11-14",
+      "department": "Science",
+      "stateId": "2",
+      "districtId": "1",
+      "activities": [
+        "Music",
+        "Dance",
+        "Sports"
+      ],
+      "subjects": {
+        "English": 38,
+        "Mother Tongue": 65,
+        "Physics": 32,
+        "Chemistry": 54,
+        "Mathematics": 30,
+        "Biology": 60
+      },
+      "age": "15Y 3M 27D",
+      "totalMarks": 279,
+      "percentage": 46.5
+    },
+    { 
+      "name": "Ragini",
+      "dob": "2011-07-23",
+      "department": "Arts",
+      "stateId": "1",
+      "districtId": "9",
+      "activities": [
+        "NSS"
+      ],
+      "subjects": {
+        "English": 31,
+        "Mother Tongue": 56,
+        "History": 78,
+        "Political Science": 34,
+        "Geography": 67,
+        "Sociology": 42
+      },
+      "age": "14Y 7M 18D",
+      "totalMarks": 308,
+      "percentage": 51.33333333333333
+    },
+    { 
+      "name": "Reva",
+      "dob": "2010-11-13",
+      "department": "Science",
+      "gender": "Female",
+      "stateId": "2",
+      "districtId": "6",
+      "activities": [
+        "Debate"
+      ],
+      "subjects": {
+        "English": 87,
+        "Mother Tongue": 67,
+        "Physics": 65,
+        "Chemistry": 67,
+        "Mathematics": 60,
+        "Biology": 90
+      },
+      "age": "15Y 4M 0D",
+      "totalMarks": 436,
+      "percentage": 72.66666666666667
+    },
+    { 
+      "name": "Krishiv",
+      "dob": "2011-03-07",
+      "department": "Science",
+      "gender": "Male 👨",
+      "stateId": "1",
+      "districtId": "1",
+      "activities": [
+        "Sports",
+        "NCC",
+        "Drama"
+      ],
       "subjects": {
         "English": 92,
         "Mother Tongue": 92,
         "Physics": 92,
         "Chemistry": 92,
         "Mathematics": 92,
-        "Biology": 92
+        "Biology": 93
       },
-      "age": "15Y 11M 21D",
-      "totalMarks": 552,
-      "percentage": 92
+       
+      "age": "15Y 0M 6D",
+      "totalMarks": 553,
+      "percentage": 92.16666666666666
+    },
+    {
+      "name": "Akansha",
+      "dob": "2010-06-18",
+      "department": "Arts",
+      "gender": "Female 👩",
+      "stateId": 1,
+      "districtId": 17,
+      "activities": [
+        "Music"
+      ],
+      "subjects": {
+        "English": 94,
+        "Mother Tongue": 95,
+        "History": 96,
+        "Political Science": 93,
+        "Geography": 93,
+        "Sociology": 90
+      },
+      "age": "15Y 8M 24D",
+      "totalMarks": 561,
+      "percentage": 93.5 
+    },
+    { 
+      "name": "kaveri",
+      "dob": "2010-12-18",
+      "department": "Science",
+      "gender": "Female 👩",
+      "stateId": "2",
+      "districtId": "10",
+      "activities": [
+        "Music",
+        "NSS",
+        "Drama"
+      ],
+       "subjects": {
+        "English": 32,
+        "Mother Tongue": 67,
+        "Physics": 47,
+        "Chemistry": 50,
+        "Mathematics": 34,
+        "Biology": 45
+      },
+      "age": "15Y 2M 24D",
+      "totalMarks": 275,
+      "percentage": 45.83333333333333
+    },
+    { 
+      "name": "kailas",
+      "dob": "2011-02-28",
+      "department": "Commerce",
+      "gender": "Male 👨",
+      "stateId": "1",
+      "districtId": "13",
+      "activities": [
+        "Debate",
+        "NCC",
+        "Drama"
+      ],
+       "subjects": {
+        "English": 61,
+        "Mother Tongue": 62,
+        "Accountancy": 76,
+        "Business Studies": 52,
+        "Economics": 76,
+        "Mathematics": 49
+      },
+      "age": "15Y 0M 14D",
+      "totalMarks": 376,
+      "percentage": 62.66666666666667
+    },
+    { 
+      "name": "Mukesh",
+      "dob": "2011-05-01",
+      "department": "Science",
+      "gender": "Male 👨",
+      "stateId": "1",
+      "districtId": "14",
+      "activities": [
+        "Music"
+      ],
+      "subjects": {
+        "English": 69,
+        "Mother Tongue": 73,
+        "Physics": 61,
+        "Chemistry": 54,
+        "Mathematics": 70,
+        "Biology": 66
+      },
+      "age": "14Y 10M 13D",
+      "totalMarks": 393,
+      "percentage": 65.5
+    },
+    { 
+      "name": "Ashwini",
+      "dob": "2011-04-09",
+      "department": "Science",
+      "gender": "Female 👩",
+      "stateId": "2",
+      "districtId": "15",
+      "activities": [
+        "Dance"
+      ],
+       "subjects": {
+        "English": 55,
+        "Mother Tongue": 45,
+        "Physics": 65,
+        "Chemistry": 43,
+        "Mathematics": 67,
+        "Biology": 56
+      },
+      "age": "14Y 11M 5D",
+      "totalMarks": 331,
+      "percentage": 55.166666666666664
+    },
+    { 
+      "name": "Niti",
+      "dob": "2011-10-14",
+      "department": "Science",
+      "gender": "Female 👩",
+      "stateId": "1",
+      "districtId": "10",
+      "activities": [
+        "Dance",
+        "NSS"
+      ],
+      "subjects": {
+        "English": 32,
+        "Mother Tongue": 30,
+        "Physics": 45,
+        "Chemistry": 36,
+        "Mathematics": 38,
+        "Biology": 31
+      },
+      "age": "14Y 5M 0D",
+      "totalMarks": 212,
+      "percentage": 35.333333333333336
+    },
+    { 
+      "name": "vighnesh",
+      "dob": "2010-11-19",
+      "department": "Commerce",
+      "gender": "Male 👨",
+      "stateId": "1",
+      "districtId": "27",
+      "activities": [
+        "Debate"
+      ],
+      "subjects": {
+        "English": 85,
+        "Mother Tongue": 86,
+        "Accountancy": 81,
+        "Business Studies": 89,
+        "Economics": 83,
+        "Mathematics": 87
+      },
+      "age": "15Y 3M 23D",
+      "totalMarks": 511,
+      "percentage": 85.17
+    },
+    {
+      "name": "Amit",
+      "dob": "2011-07-29",
+      "department": "Science",
+      "gender": "Male 👨",
+      "stateId": 1,
+      "districtId": 36,
+      "activities": [
+        "Sports"
+      ],
+       "subjects": {
+        "English": 31,
+        "Mother Tongue": 32,
+        "Physics": 34,
+        "Chemistry": 30,
+        "Mathematics": 32,
+        "Biology": 34
+      },
+      "age": "14Y 7M 13D",
+      "totalMarks": 193,
+      "percentage": 32.17 
+    },
+    { 
+      "name": "Raj",
+      "dob": "2010-09-15",
+      "department": "Commerce",
+      "gender": "Male 👨",
+      "stateId": "1",
+      "districtId": "7",
+      "activities": [
+        "Sports"
+      ],
+       "subjects": {
+        "English": 28,
+        "Mother Tongue": 28,
+        "Accountancy": 28,
+        "Business Studies": 28,
+        "Economics": 28,
+        "Mathematics": 28
+      },
+      "age": "15Y 5M 27D",
+      "totalMarks": 168,
+      "percentage": 28
+    },
+    { 
+      "name": "Dhiraj",
+      "dob": "2010-02-16",
+      "department": "Commerce",
+      "gender": "Male 👨",
+      "stateId": "1",
+      "districtId": "9",
+      "activities": [
+        "NCC",
+        "NSS"
+      ],
+      "subjects": {
+        "English": 94,
+        "Mother Tongue": 95,
+        "Accountancy": 92,
+        "Business Studies": 96,
+        "Economics": 93,
+        "Mathematics": 93
+      },
+      "age": "16Y 1M 0D",
+      "totalMarks": 563,
+      "percentage": 93.83
+    },
+    { 
+      "name": "Sonali",
+      "dob": "2011-02-02",
+      "department": "Science",
+      "gender": "Female 👩",
+      "stateId": "1",
+      "districtId": "8",
+      "activities": [
+        "Debate"
+      ],
+       "subjects": {
+        "English": 45,
+        "Mother Tongue": 54,
+        "Physics": 50,
+        "Chemistry": 57,
+        "Mathematics": 60,
+        "Biology": 40
+      },
+      "age": "15Y 1M 15D",
+      "totalMarks": 306,
+      "percentage": 51
+    },
+    { 
+      "name": "Mohan",
+      "dob": "2011-04-05",
+      "department": "Arts",
+      "gender": "Male 👨",
+      "stateId": "2",
+      "districtId": "5",
+      "activities": [
+        "Music"
+      ],
+      "subjects": {
+        "English": 36,
+        "Mother Tongue": 36,
+        "History": 36,
+        "Political Science": 36,
+        "Geography": 36,
+        "Sociology": 36
+      },
+      "age": "14Y 11M 12D",
+      "totalMarks": 216,
+      "percentage": 36
+    },
+    { 
+      "name": "Kalyan",
+      "dob": "2012-01-01",
+      "department": "Commerce",
+      "gender": "Male 👨",
+      "stateId": "2",
+      "districtId": "7",
+      "activities": [
+        "Dance"
+      ],
+       "subjects": {
+        "English": 40,
+        "Mother Tongue": 40,
+        "Accountancy": 40,
+        "Business Studies": 40,
+        "Economics": 40,
+        "Mathematics": 40
+      },
+      "age": "14Y 2M 16D",
+      "totalMarks": 240,
+      "percentage": 40
+    },
+    { 
+      "name": "Rajendra",
+      "dob": "2010-10-13",
+      "department": "Arts",
+      "gender": "Male 👨",
+      "stateId": "2",
+      "districtId": "14",
+      "activities": [
+        "Music"
+      ],
+       "subjects": {
+        "English": 50,
+        "Mother Tongue": 50,
+        "History": 50,
+        "Political Science": 50,
+        "Geography": 50,
+        "Sociology": 50
+      },
+      "age": "15Y 5M 4D",
+      "totalMarks": 300,
+      "percentage": 50
+    },
+    { 
+      "name": "Priya",
+      "dob": "2011-09-15",
+      "department": "Commerce",
+      "gender": "Female 👩",
+      "stateId": "1",
+      "districtId": "7",
+      "activities": [
+        "Debate"
+      ],
+      "subjects": {
+        "English": 46,
+        "Mother Tongue": 46,
+        "Accountancy": 46,
+        "Business Studies": 46,
+        "Economics": 46,
+        "Mathematics": 46
+      },
+      "age": "14Y 6M 2D",
+      "totalMarks": 276,
+      "percentage": 46
+    },
+    { 
+      "name": "Meena",
+      "dob": "2012-02-29",
+      "department": "Commerce",
+      "gender": "Female 👩",
+      "stateId": "2",
+      "districtId": "8",
+      "activities": [
+        "Sports"
+      ],
+       "subjects": {
+        "English": 63,
+        "Mother Tongue": 63,
+        "Accountancy": 63,
+        "Business Studies": 63,
+        "Economics": 63,
+        "Mathematics": 63
+      },
+      "age": "14Y 0M 16D",
+      "totalMarks": 378,
+      "percentage": 63
+    },
+    { 
+      "name": "basir",
+      "dob": "2011-08-12",
+      "department": "Commerce",
+      "gender": "Male 👨",
+      "stateId": "2",
+      "districtId": "23",
+      "activities": [
+        "Drama"
+      ],
+      "subjects": {
+        "English": 87,
+        "Mother Tongue": 59,
+        "Accountancy": 83,
+        "Business Studies": 57,
+        "Economics": 74,
+        "Mathematics": 67
+      },
+      "age": "14Y 7M 6D",
+      "totalMarks": 427,
+      "percentage": 71.17
+    },
+    { 
+      "name": "Tanya",
+      "dob": "2010-07-18",
+      "department": "Science",
+      "gender": "Female 👩",
+      "stateId": "1",
+      "districtId": "2",
+      "activities": [
+        "Debate"
+      ],
+      "subjects": {
+        "English": 67,
+        "Mother Tongue": 78,
+        "Physics": 65,
+        "Chemistry": 67,
+        "Mathematics": 66,
+        "Biology": 56
+      },
+      "age": "15Y 8M 0D",
+      "totalMarks": 399,
+      "percentage": 66.5
+    }
+  ],
+  "states": [
+    {
+      "id": "1",
+      "name": "Maharashtra",
+      "districts": [
+        {
+          "id": 1,
+          "name": "Ahmednagar"
+        },
+        {
+          "id": 2,
+          "name": "Akola"
+        },
+        {
+          "id": 3,
+          "name": "Amravati"
+        },
+        {
+          "id": 4,
+          "name": "Aurangabad"
+        },
+        {
+          "id": 5,
+          "name": "Beed"
+        },
+        {
+          "id": 6,
+          "name": "Bhandara"
+        },
+        {
+          "id": 7,
+          "name": "Buldhana"
+        },
+        {
+          "id": 8,
+          "name": "Chandrapur"
+        },
+        {
+          "id": 9,
+          "name": "Dhule"
+        },
+        {
+          "id": 10,
+          "name": "Gadchiroli"
+        },
+        {
+          "id": 11,
+          "name": "Gondia"
+        },
+        {
+          "id": 12,
+          "name": "Hingoli"
+        },
+        {
+          "id": 13,
+          "name": "Jalgaon"
+        },
+        {
+          "id": 14,
+          "name": "Jalna"
+        },
+        {
+          "id": 15,
+          "name": "Kolhapur"
+        },
+        {
+          "id": 16,
+          "name": "Latur"
+        },
+        {
+          "id": 17,
+          "name": "Mumbai City"
+        },
+        {
+          "id": 18,
+          "name": "Mumbai Suburban"
+        },
+        {
+          "id": 19,
+          "name": "Nagpur"
+        },
+        {
+          "id": 20,
+          "name": "Nanded"
+        },
+        {
+          "id": 21,
+          "name": "Nandurbar"
+        },
+        {
+          "id": 22,
+          "name": "Nashik"
+        },
+        {
+          "id": 23,
+          "name": "Osmanabad"
+        },
+        {
+          "id": 24,
+          "name": "Palghar"
+        },
+        {
+          "id": 25,
+          "name": "Parbhani"
+        },
+        {
+          "id": 26,
+          "name": "Pune"
+        },
+        {
+          "id": 27,
+          "name": "Raigad"
+        },
+        {
+          "id": 28,
+          "name": "Ratnagiri"
+        },
+        {
+          "id": 29,
+          "name": "Sangli"
+        },
+        {
+          "id": 30,
+          "name": "Satara"
+        },
+        {
+          "id": 31,
+          "name": "Sindhudurg"
+        },
+        {
+          "id": 32,
+          "name": "Solapur"
+        },
+        {
+          "id": 33,
+          "name": "Thane"
+        },
+        {
+          "id": 34,
+          "name": "Wardha"
+        },
+        {
+          "id": 35,
+          "name": "Washim"
+        },
+        {
+          "id": 36,
+          "name": "Yavatmal"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Karnataka",
+      "districts": [
+        {
+          "id": 1,
+          "name": "Bagalkot"
+        },
+        {
+          "id": 2,
+          "name": "Ballari"
+        },
+        {
+          "id": 3,
+          "name": "Belagavi"
+        },
+        {
+          "id": 4,
+          "name": "Bengaluru Rural"
+        },
+        {
+          "id": 5,
+          "name": "Bengaluru Urban"
+        },
+        {
+          "id": 6,
+          "name": "Bidar"
+        },
+        {
+          "id": 7,
+          "name": "Chamarajanagar"
+        },
+        {
+          "id": 8,
+          "name": "Chikkaballapur"
+        },
+        {
+          "id": 9,
+          "name": "Chikkamagaluru"
+        },
+        {
+          "id": 10,
+          "name": "Chitradurga"
+        },
+        {
+          "id": 11,
+          "name": "Dakshina Kannada"
+        },
+        {
+          "id": 12,
+          "name": "Davanagere"
+        },
+        {
+          "id": 13,
+          "name": "Dharwad"
+        },
+        {
+          "id": 14,
+          "name": "Gadag"
+        },
+        {
+          "id": 15,
+          "name": "Hassan"
+        },
+        {
+          "id": 16,
+          "name": "Haveri"
+        },
+        {
+          "id": 17,
+          "name": "Kalaburagi"
+        },
+        {
+          "id": 18,
+          "name": "Kodagu"
+        },
+        {
+          "id": 19,
+          "name": "Kolar"
+        },
+        {
+          "id": 20,
+          "name": "Koppal"
+        },
+        {
+          "id": 21,
+          "name": "Mandya"
+        },
+        {
+          "id": 22,
+          "name": "Mysuru"
+        },
+        {
+          "id": 23,
+          "name": "Raichur"
+        },
+        {
+          "id": 24,
+          "name": "Ramanagara"
+        },
+        {
+          "id": 25,
+          "name": "Shivamogga"
+        },
+        {
+          "id": 26,
+          "name": "Tumakuru"
+        },
+        {
+          "id": 27,
+          "name": "Udupi"
+        },
+        {
+          "id": 28,
+          "name": "Uttara Kannada"
+        },
+        {
+          "id": 29,
+          "name": "Vijayapura"
+        },
+        {
+          "id": 30,
+          "name": "Yadgir"
+        },
+        {
+          "id": 31,
+          "name": "Vijayanagara"
+        }
+      ]
+    }
+  ],
+  "principals": [
+    {
+      "id": "p1",
+      "name": "Headmaster",
+      "email": "principal@school.com",
+      "password": "123456"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -1,1 +1,64 @@
-<p>login-student works!</p>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+
+  <div class="card shadow p-4" style="width:400px">
+
+    <h3 class="text-center mb-4">Principal Login</h3>
+
+    <form (ngSubmit)="login()" #loginForm="ngForm">
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          [(ngModel)]="email"
+          required
+          email
+          #emailRef="ngModel"
+          placeholder="Enter email"
+        />
+
+        <div class="text-danger" *ngIf="emailRef.invalid && emailRef.touched">
+          Valid email is required
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          [(ngModel)]="password"
+          required
+          minlength="6"
+          #passwordRef="ngModel"
+          placeholder="Enter password"
+        />
+
+        <div class="text-danger" *ngIf="passwordRef.invalid && passwordRef.touched">
+          Password must be at least 6 characters
+        </div>
+      </div>
+
+      <!-- Login Button -->
+      <div class="d-grid">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="loginForm.invalid"
+        >
+          Login
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

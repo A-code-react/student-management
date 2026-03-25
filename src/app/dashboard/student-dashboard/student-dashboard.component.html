@@ -1,0 +1,119 @@
+<div class="container mt-4">
+
+  <h3 class="mb-4">📊 Student Dashboard</h3>
+
+  <!-- KPI CARDS -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm p-3 bg-primary text-white">
+        <h6> 📈 Total Students</h6>
+        <h2 class="fw-bold">{{ totalStudents }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm p-3 bg-success text-white">
+        <h6>PASS</h6>
+        <h2 class="fw-bold">{{ passCount }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm p-3 bg-warning text-dark">
+        <h6>ATKT</h6>
+        <h2 class="fw-bold">{{ atktCount }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm p-3 bg-danger text-white">
+        <h6>FAIL</h6>
+        <h2 class="fw-bold">{{ failCount }}</h2>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- FIRST ROW CHARTS -->
+  <div class="row g-4">
+
+    <!-- Department Distribution -->
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3 h-100">
+        <h5 class="mb-3">🥧Department Distribution</h5>
+
+        <canvas
+          baseChart
+          [data]="{
+            labels: departmentLabels,
+            datasets: [{ data: departmentData }]
+          }"
+          [type]="'pie'"
+          (chartClick)="onDepartmentChartClick($event)">
+        </canvas>
+
+      </div>
+    </div>
+
+    <!-- Result Analysis -->
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3 h-100">
+        <h5 class="mb-3"> 📊Student Result Analysis</h5>
+
+        <canvas
+          baseChart
+          [data]="{
+            labels: statusLabels,
+            datasets: [{ data: statusData, label: 'Students' }]
+          }"
+          [type]="'bar'">
+        </canvas>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- SECOND ROW CHARTS -->
+  <div class="row g-4 mt-2">
+
+    <!-- Top Students -->
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3 h-100">
+        <h5 class="mb-3">🏆Top 5 Students </h5>
+
+        <canvas
+          baseChart
+          [data]="{
+            labels: topStudentLabels,
+            datasets: [{ data: topStudentData, label: 'Percentage' }]
+          }"
+          [type]="'bar'">
+        </canvas>
+
+      </div>
+    </div>
+
+    <!-- Department Performance -->
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3 h-100">
+        <h5 class="mb-3">Department Performance (Average %)</h5>
+
+        <canvas
+          baseChart
+          [data]="{
+            labels: departmentPerformanceLabels,
+            datasets: [{ data: departmentPerformanceData, label: 'Average %' }]
+          }"
+          [type]="'bar'">
+        </canvas>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

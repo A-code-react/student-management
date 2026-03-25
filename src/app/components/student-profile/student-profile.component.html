@@ -1,0 +1,128 @@
+<div class="marksheet container mt-4" *ngIf="student">
+
+  <!-- Header -->
+ <div class="d-flex justify-content-between align-items-center mb-3">
+
+  <!-- College Info -->
+  <div>
+    <h2 class="fw-bold mb-0">ABC Junior College</h2>
+    <h5 class="text-decoration-underline">Student Marksheet</h5>
+  </div>
+
+  <!-- Student Photo -->
+  <div>
+    <img
+  [src]="student.photo || 'icons/blank-avatar-profile-icon.jpg'"
+  (error)="onImgError($event)"
+  width="80"
+  height="80"
+  class="border rounded"
+/>
+  </div>
+
+</div>
+
+  <!-- Student Info -->
+  <div class="row mb-3">
+  <div class="col-md-6">
+    <p><strong>Name:</strong> {{ student.name || 'Not Available' }}</p>
+    <p><strong>DOB:</strong> {{ student.dob || 'Not Available' }}</p>
+    <p><strong>Department:</strong> {{ student.department || 'Not Available' }}</p>
+  </div>
+
+  <div class="col-md-6 text-md-end">
+    <p><strong>Gender:</strong> {{ student.gender || 'Not Available' }}</p>
+    <p><strong>Age:</strong> {{ student.age || 'Not Available' }}</p>
+    <p>
+  <strong>Grade:</strong>
+  <span
+    [class.text-success]="student.percentage >= 60"
+    [class.text-warning]="student.percentage >= 50 && student.percentage < 60"
+    [class.text-danger]="student.percentage < 50"
+  >
+    {{ getGrade(student.percentage) }}
+  </span>
+</p>
+  </div>
+</div>
+
+  <!-- Table -->
+  <table class="table table-bordered text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Subject</th>
+        <th>Marks</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+  <tr *ngFor="let sub of student.subjects | keyvalue">
+  <td>{{ sub.key }}</td>
+  <td>{{ sub.value }}</td>
+  <td>
+    <span
+      [class.text-success]="isPass(sub.value)"
+      [class.text-danger]="!isPass(sub.value)"
+    >
+      {{ getSubjectStatus(sub.value) }}
+    </span>
+  </td>
+</tr>
+    </tbody>
+  </table>
+
+  <!-- Summary -->
+  <div class="row text-center mt-3">
+
+    <div class="col-md-4">
+      <div class="border p-2">
+        <strong>Total Marks</strong><br>
+        <strong>{{ student.totalMarks ?? '--' }}%</strong>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="border p-2">
+        <strong>Percentage</strong><br>
+        
+
+<strong>{{ student.percentage ?? '--' }}%</strong>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="border p-2">
+        <strong>Result</strong><br>
+        <span
+          [class.text-success]="student.percentage >= 35"
+          [class.text-danger]="student.percentage < 35"
+        >
+          {{ student.percentage >= 35 ? 'PASS' : 'FAIL' }}
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="d-flex justify-content-between mt-5">
+    <div>
+      <p>___________________</p>
+      <p>Student Signature</p>
+    </div>
+
+    <div>
+      <p>___________________</p>
+      <p>Authorized Signature</p>
+    </div>
+  </div>
+
+  <!-- Print Button -->
+  <div class="text-center mt-4">
+    <button class="btn btn-success" (click)="printProfile()">
+      🖨 Print Marksheet
+    </button>
+  </div>
+
+</div>

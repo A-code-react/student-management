@@ -8,28 +8,55 @@
   <form [formGroup]="studentForm" (ngSubmit)="addStudent()">
     <!-- Student Details -->
     <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label fw-semibold">Student Name</label>
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Student Name</label>
 
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Enter student name"
-          formControlName="name"
-        />
+        <input type="text" class="form-control" placeholder="Enter student name" formControlName="name" />
 
-        <div
-          class="text-danger mt-1"
-          *ngIf="
+        <div class="text-danger mt-1" *ngIf="
             studentForm.get('name')?.touched && studentForm.get('name')?.invalid
-          "
-        >
+          ">
           Name is required
         </div>
       </div>
+      <div class="col-md-4 mb-3">
 
-      <div class="col-md-6 mb-3">
-        <label class="form-label fw-semibold">Department</label>
+        <div class="row mb-3">
+
+          <label class="form-label fw-bold">Gender</label>
+
+          <div class="d-flex gap-4">
+
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="Male 👨" formControlName="gender" id="male">
+
+              <label class="form-check-label" for="male">
+                Male 👨
+              </label>
+            </div>
+
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="Female 👩" formControlName="gender" id="female">
+
+              <label class="form-check-label" for="female">
+                Female 👩
+              </label>
+            </div>
+            <!-- Error message -->
+            <div class="text-danger mt-1"
+              *ngIf="studentForm.get('gender')?.touched && studentForm.get('gender')?.invalid">
+
+              Please select gender
+
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Department</label>
 
         <select class="form-select" formControlName="department">
           <option value="">Select Department</option>
@@ -38,13 +65,10 @@
           <option value="Arts">Arts</option>
         </select>
 
-        <div
-          class="text-danger mt-1"
-          *ngIf="
+        <div class="text-danger mt-1" *ngIf="
             studentForm.get('department')?.touched &&
             studentForm.get('department')?.invalid
-          "
-        >
+          ">
           Department is required
         </div>
       </div>
@@ -52,13 +76,20 @@
 
     <!-- DOB -->
     <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label fw-semibold">Date of Birth</label>
+        <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Photo</label>
+        <!-- <input type="text" class="form-control" placeholder="Enter photo URL" formControlName="photo" /> -->
+       <input type="file" (change)="onFileChange($event)" />
+       <!-- Preview -->
+<img *ngIf="imagePreview" [src]="imagePreview" width="120" />
+      </div>  
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">Date of Birth</label>
 
         <input type="date" class="form-control" formControlName="dob" />
       </div>
 
-      <div class="col-md-6 d-flex align-items-end">
+      <div class="col-md-4 d-flex align-items-end">
         <div class="alert alert-info w-100 mb-3">
           Age: {{ ageYears }} Years {{ ageMonths }} Months {{ ageDays }} Days
         </div>
@@ -69,43 +100,87 @@
     <div *ngIf="ageError" class="alert alert-danger">
       {{ ageError }}
     </div>
+    <!-- State & District -->
+    <div class="row">
 
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">State</label>
+
+        <select class="form-control" formControlName="stateId" [disabled]="!studentForm.get('stateId')?.value">
+          <option value="">Select State</option>
+          <option *ngFor="let state of states" [value]="state.id">
+            {{state.name}}
+          </option>
+        </select>
+
+        <div class="text-danger" *ngIf="studentForm.get('stateId')?.touched && studentForm.get('stateId')?.invalid">
+          State is required
+        </div>
+
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label fw-bold">District</label>
+
+        <select class="form-control" formControlName="districtId">
+          <option value="">Select District</option>
+          <option *ngFor="let district of districts" [value]="district.id">
+            {{district.name}}
+          </option>
+        </select>
+
+        <div class="text-danger"
+          *ngIf="studentForm.get('districtId')?.touched && studentForm.get('districtId')?.invalid">
+          District is required
+        </div>
+
+      </div>
+
+    </div>
+    <h4 class="mt-4 mb-3">Extracurricular Activities</h4>
+
+    <div class="row">
+      <div class="col-md-3" *ngFor="let activity of activitiesList">
+
+        <div class="form-check">
+          <input class="form-check-input"
+           type="checkbox"
+            [value]="activity"
+             (change)="onActivityChange($event)"
+            [checked]="studentForm.value.activities?.includes(activity)" />
+
+          <label class="form-check-label">
+            {{activity}}
+          </label>
+        </div>
+
+      </div>
+    </div>
     <!-- SUBJECT MARKS -->
     <h4 class="mt-4 mb-3">Subject Marks</h4>
 
     <div *ngIf="subjects.length" formGroupName="subjects">
       <div class="row">
         <div class="col-md-4 mb-3" *ngFor="let subject of subjects">
-          <label class="form-label fw-semibold">{{ subject }}</label>
+          <label class="form-label fw-bold">{{ subject }}</label>
 
-          <input
-            type="number"
-            class="form-control"
-            [formControlName]="subject"
-            placeholder="Marks out of 100"
-          />
+          <input type="number" class="form-control" [formControlName]="subject" placeholder="Marks out of 100" />
           <div class="text-danger">
-            <div
-              *ngIf="
+            <div *ngIf="
                 studentForm.get('subjects')?.get(subject)?.touched &&
                 studentForm.get('subjects')?.get(subject)?.invalid
-              "
-            >
-              <div
-                *ngIf="
+              ">
+              <div *ngIf="
                   studentForm.get('subjects')?.get(subject)?.errors?.[
                     'required'
                   ]
-                "
-              >
+                ">
                 Marks are required
               </div>
-              <div
-                *ngIf="
+              <div *ngIf="
                   studentForm.get('subjects')?.get(subject)?.errors?.['min'] ||
                   studentForm.get('subjects')?.get(subject)?.errors?.['max']
-                "
-              >
+                ">
                 Marks must be between 0 and 100
               </div>
             </div>
@@ -131,19 +206,11 @@
 
     <!-- ACTION BUTTONS -->
     <div class="mt-4 d-flex gap-3">
-      <button
-        type="submit"
-        class="btn btn-success"
-        [disabled]="studentForm.invalid || ageError"
-      >
+      <button type="submit" class="btn btn-success" [disabled]="studentForm.invalid || ageError">
         {{ isEditMode ? "Update Student" : "Add Student" }}
       </button>
 
-      <button
-        type="button"
-        class="btn btn-secondary px-4"
-        routerLink="/list-student"
-      >
+      <button type="button" class="btn btn-secondary px-4" routerLink="/list-student">
         Cancel
       </button>
     </div>

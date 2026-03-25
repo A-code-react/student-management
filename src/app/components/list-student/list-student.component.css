@@ -1,3 +1,10 @@
+
+.container {
+  max-width: 100% !important;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
 .gold {
     font-weight: bold;
 
@@ -22,4 +29,51 @@
 
 .table-sm td {
     padding: 6px;
+}
+.btn-group .btn{
+font-weight:500;
+}
+
+.dropdown-menu{
+max-height:200px;
+overflow-y:auto;
+}
+td img {
+  object-fit: cover;
+}
+.pagination .page-link {
+  cursor: pointer;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+/* Blur effect when student details are open */
+.details-open tbody tr:not(.table-light):not(.selected-student) {
+  filter: blur(2px);
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  pointer-events: none; /* Prevent interaction with blurred rows */
+}
+
+.details-open .table-light,
+.details-open .selected-student {
+  filter: none;
+  opacity: 1;
+  transform: scale(1.02);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 10;
+}
+.page-size-dropdown{
+  width:70px;
+}
+
+ 
+
+.pagination .page-link{
+  cursor:pointer;
 }

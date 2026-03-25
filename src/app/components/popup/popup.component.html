@@ -1,0 +1,13 @@
+<div class="popup-overlay" *ngIf="popupData.visible" (click)="close()">
+  <div class="popup" [ngClass]="popupData.type" (click)="$event.stopPropagation()">
+    <div class="popup-content">
+      <span class="icon" [ngSwitch]="popupData.type">
+        <span *ngSwitchCase="'success'">✅</span>
+        <span *ngSwitchCase="'error'">❌</span>
+        <span *ngSwitchCase="'info'">ℹ️</span>
+      </span>
+      <span class="message">{{ popupData.message }}</span>
+      <button class="close-btn" (click)="close()">×</button>
+    </div>
+  </div>
+</div>

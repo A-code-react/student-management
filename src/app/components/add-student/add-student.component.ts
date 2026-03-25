@@ -1,4 +1,5 @@
 import { StudentService } from './../../services/student.service';
+import { PopupService } from '../../services/popup.service';
 
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
@@ -27,6 +28,22 @@ export class AddStudentComponent {
   percentage = 0;
   studentId: string | null = null;
   isEditMode = false;
+  states: any[] = [];
+  districts: any[] = [];
+  genders: string[] = [];
+  studentPhoto: string= "";
+  selectedFile!: File;
+  imagePreview: string | ArrayBuffer | null = null;
+  activitiesList: string[] = [
+    'Sports',
+    'Music',
+    'Dance',
+    'Drama',
+    'Debate',
+    'Art',
+    'NCC',
+    'NSS',
+  ];
   departments: any = {
     science: [
       'English',
@@ -61,11 +78,17 @@ export class AddStudentComponent {
     private studentService: StudentService,
     private route: ActivatedRoute,
     private router: Router,
+    private popupService: PopupService,
   ) {
     this.studentForm = this.fb.group({
       name: ['', Validators.required],
       dob: ['', Validators.required],
       department: ['', Validators.required],
+      gender : ['', Validators.required],
+      stateId: ['', Validators.required],
+      districtId: ['', Validators.required],
+      activities: [[]], // multi select array
+     
     });
 
     // Marks calculation
@@ -83,16 +106,28 @@ export class AddStudentComponent {
       this.loadSubjects(dept);
     });
   }
-ngOnInit() {
+  ngOnInit() {
+    this.studentId = this.route.snapshot.paramMap.get('id');
 
-  this.studentId = this.route.snapshot.paramMap.get('id');
+    if (this.studentId) {
+      this.isEditMode = true; 
+    }
 
-  if(this.studentId){
-    this.isEditMode = true;
-    this.loadStudent(this.studentId);
+    this.loadStates();
+
+    this.studentForm.get('stateId')?.valueChanges.subscribe((stateId) => {
+    
+
+      // load districts for selected state
+      if (stateId) {
+        this.loadDistricts(stateId);
+          // reset district when state changes
+      this.studentForm.get('districtId')?.reset();
+      } else {
+        this.districts = [];
+      }
+    });
   }
-
-}
   calculateMarks() {
     const subjects = this.studentForm.get('subjects')?.value;
 
@@ -102,7 +137,9 @@ ngOnInit() {
 
     this.totalMarks = marks.reduce((sum, m) => sum + Number(m), 0);
 
-    this.percentage = (this.totalMarks / (marks.length * 100)) * 100;
+   this.percentage = Number(
+  ((this.totalMarks / (marks.length * 100)) * 100).toFixed(2)
+);
   }
 
   // addStudent stays defined later to use the service
@@ -161,83 +198,143 @@ ngOnInit() {
     this.studentForm.addControl('subjects', this.fb.group(subjectControls));
   }
 
-  // addStudent() {
-  //   const studentData = {
-  //     ...this.studentForm.value,
-  //     age: `${this.ageYears}Y ${this.ageMonths}M ${this.ageDays}D`,
-  //     totalMarks: this.totalMarks,
-  //     percentage: this.percentage,
-  //   };
+loadStates() {
+  this.studentService.getStates().subscribe((res: any) => {
+    this.states = res;
 
-  //   this.studentService.addStudent(studentData).subscribe({
-  //     next: (res) => {
-  //       console.log('Student saved', res);
-  //       alert('Student added successfully');
-  //       this.studentForm.reset();
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //     },
-  //   });
-  // }
-addStudent(){
+    // If edit mode, load districts after states arrive
+    if (this.isEditMode && this.studentId) {
+      this.loadStudent(this.studentId);
+    }
+  });
+}
+onFileChange(event: any) {
+  const file = event.target.files[0];
 
-const studentData = {
-  ...this.studentForm.value,
-  age: `${this.ageYears}Y ${this.ageMonths}M ${this.ageDays}D`,
-  totalMarks: this.totalMarks,
-  percentage: this.percentage
-};
+  if (file) {
+    this.selectedFile = file;
 
-if(this.isEditMode){
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result;
+    };
 
-this.studentService.updateStudent(this.studentId!,studentData)
-.subscribe(()=>{
+    reader.readAsDataURL(file);
+  }
+}
+addStudent() {
+  if (this.studentForm.invalid || this.ageError) {
+    this.studentForm.markAllAsTouched();
+    return;
+  }
 
-alert("Student updated successfully");
+  const formData = new FormData();
 
-this.router.navigate(['/list-student']);
+  formData.append("name", this.studentForm.value.name);
+  formData.append("dob", this.studentForm.value.dob);
+  formData.append("department", this.studentForm.value.department);
+  formData.append("gender", this.studentForm.value.gender);
+  formData.append("stateId", this.studentForm.value.stateId);
+  formData.append("districtId", this.studentForm.value.districtId);
 
-});
+  formData.append(
+    "activities",
+    JSON.stringify(this.studentForm.value.activities)
+  );
+  formData.append(
+    "subjects",
+    JSON.stringify(this.studentForm.value.subjects)
+  );
 
-}else{
+  formData.append(
+    "age",
+    `${this.ageYears}Y ${this.ageMonths}M ${this.ageDays}D`
+  );
+  formData.append("totalMarks", this.totalMarks.toString());
+  formData.append("percentage", this.percentage.toString());
 
-this.studentService.addStudent(studentData)
-.subscribe(()=>{
+  // ✅ IMAGE HANDLING (IMPORTANT FIX)
+  if (this.selectedFile) {
+    // new image selected
+    formData.append("photo", this.selectedFile);
+  } else if (this.isEditMode && this.studentPhoto) {
+    // keep old image
+    formData.append("photo", this.studentPhoto);
+  }
 
-alert("Student added successfully");
+  if (this.isEditMode) {
+    this.studentService.updateStudent(this.studentId!, formData)
+      .subscribe(() => {
+        this.popupService.show('Student updated successfully', 'success');
+        this.router.navigate(['/list-student']);
+      });
+  } else {
+    this.studentService.addStudent(formData)
+      .subscribe(() => {
+        this.popupService.show('Student added successfully', 'success');
+        this.router.navigate(['/list-student']);
+      });
+  }
+}
 
-this.router.navigate(['/list-student']);
+loadStudent(id: string) {
 
-});
+  this.studentService.getStudentById(id).subscribe((student: any) => {
+
+    this.studentForm.patchValue({
+      name: student.name,
+      dob: student.dob,
+      department: student.department,
+      gender: student.gender,
+  stateId: Number(student.stateId),
+     districtId: Number(student.districtId),
+      activities: student.activities
+    });
+
+    this.loadSubjects(student.department);
+
+    setTimeout(() => {
+      this.studentForm.get('subjects')?.patchValue(student.subjects);
+    }, 400);
+
+    this.loadDistricts(student.stateId);
+
+    this.studentPhoto = student.photo || [];
+
+  });
+
+}
+  loadDistricts(stateId: any) {
+    const selectedState = this.states.find((state) => state.id == stateId);
+
+    this.districts = selectedState ? selectedState.districts : [];
+      }
+  onActivityChange(event: any) {
+    const selectedActivities = this.studentForm.value.activities || [];
+
+    if (event.target.checked) {
+      selectedActivities.push(event.target.value);
+    } else {
+      const index = selectedActivities.indexOf(event.target.value);
+      if (index > -1) {
+        selectedActivities.splice(index, 1);
+      }
+    }
+
+    this.studentForm.patchValue({
+      activities: selectedActivities,
+    });
+  }
+ 
+
 
 }
 
-}
 
-  loadStudent(id:string){
-
-this.studentService.getStudents().subscribe((data:any)=>{
-
-const student = data.find((s:any)=> s.id === id);
-
-if(student){
-
-this.studentForm.patchValue({
-  name: student.name,
-  dob: student.dob,
-  department: student.department
-});
-
-this.loadSubjects(student.department);
-
-setTimeout(()=>{
-  this.studentForm.get('subjects')?.patchValue(student.subjects);
-},100);
-
-}
-
-});
-
-}
-}
+// 1️⃣ Grade System -done
+// 2️⃣ Dashboard Cards - 
+// 3️⃣ Photo Upload - done
+// 4️⃣ Excel Export
+// 5️⃣ Charts
+// 6️⃣ Pagination
+// 7️⃣ 

@@ -1,39 +1,65 @@
 import { Routes } from '@angular/router';
-
-import { AddStudentComponent } from './components/add-student/add-student.component';
-import { EditStudentComponent } from './components/edit-student/edit-student.component';
-import { ListStudentComponent } from './components/list-student/list-student.component';
-import { LoginStudentComponent } from './components/login-student/login-student.component';
 import { RegisterStudentComponent } from './components/register-student/register-student.component';
+import { authGuard } from './guards/auth.guard';
+import { guestGuard } from './guards/guest.guard';
 
 export const routes: Routes = [
-  {
-    path: 'add-student',
-    component: AddStudentComponent
-  },
-  {
-    path: 'edit-student/:id',
-    component: AddStudentComponent
-  },
-  {
-    path: 'list-student',
-    component: ListStudentComponent
-  },
-  {
-    path: 'login',
-    component: LoginStudentComponent
-  },
-  {
-    path: 'register',
-    component: RegisterStudentComponent
-  },
+  // Default route - redirect to student list
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: '/list-student',
     pathMatch: 'full'
   },
+
+  // Login route - only accessible for non-logged-in users
+  {
+    path: 'login',
+    loadComponent: () => import('./components/login-student/login-student.component')
+      .then(m => m.LoginStudentComponent),
+    canActivate: [guestGuard]
+  },
+
+  {
+    path: 'list-student',
+    loadComponent: () => import('./components/list-student/list-student.component')
+      .then(m => m.ListStudentComponent),
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'add-student',
+    loadComponent: () => import('./components/add-student/add-student.component')
+      .then(m => m.AddStudentComponent),
+    canActivate: [authGuard]
+  },
+  {
+  path: 'edit-student/:id',
+  loadComponent: () => import('./components/add-student/add-student.component')
+    .then(m => m.AddStudentComponent),
+  canActivate: [authGuard]
+},
+{
+  path: 'dashboard',
+  loadComponent: () =>
+    import('./dashboard/student-dashboard/student-dashboard.component')
+      .then(m => m.StudentDashboardComponent),
+  canActivate: [authGuard]
+},
+{
+  path: 'student/:id',
+  loadComponent: () =>
+    import('./components/student-profile/student-profile.component')
+      .then(m => m.StudentProfileComponent),
+  canActivate: [authGuard]
+},
+  {
+    path: 'register',
+    component: RegisterStudentComponent,
+    canActivate: [guestGuard]
+  },
+  // Wildcard route - redirect to default (student list)
   {
     path: '**',
-    redirectTo: 'login'
+    redirectTo: '/list-student'
   }
 ];
