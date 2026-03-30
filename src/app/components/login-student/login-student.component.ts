@@ -7,7 +7,7 @@ import { PopupService } from '../../services/popup.service';
 
 @Component({
   selector: 'app-login-student',
- imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login-student.component.html',
   styleUrl: './login-student.component.css'
 })
@@ -15,27 +15,41 @@ export class LoginStudentComponent {
   email: string = '';
   password: string = '';
   loginForm: any;
+  isLoading = false;
 
-  constructor(private StudentService: StudentService, private router: Router, private popupService: PopupService) {}
-login() {
-  const payload = {
-    email: this.email,
-    password: this.password
-  };
+  constructor(
+    private StudentService: StudentService, 
+    private router: Router, 
+    private popupService: PopupService
+  ) {}
 
-  this.StudentService.login(payload).subscribe({
-    next: (res) => {
-      // ✅ store token
-      localStorage.setItem('token', res.token);
-      localStorage.setItem('principal', JSON.stringify(res.user || res));
-
-      this.popupService.show('Login successful', 'success');
-
-      this.router.navigate(['/list-student']);
-    },
-    error: (err) => {
-      this.popupService.show(err.error.message || 'Login failed', 'error');
+  login() {
+    // Prevent login if already loading
+    if (this.isLoading) {
+      return;
     }
-  });
-}
+
+    const payload = {
+      email: this.email,
+      password: this.password
+    };
+
+    this.isLoading = true;
+
+    this.StudentService.login(payload).subscribe({
+      next: (res) => {
+        // ✅ store token
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('principal', JSON.stringify(res.user || res));
+
+        this.isLoading = false;
+        this.popupService.show('Login successful', 'success');
+        this.router.navigate(['/list-student']);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.popupService.show(err.error?.message || 'Login failed. Please check your credentials.', 'error');
+      }
+    });
+  }
 }

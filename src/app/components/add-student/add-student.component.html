@@ -1,8 +1,17 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Add 11th Standard Student</h2>
-
+    <h2>{{ isEditMode ? 'Edit' : 'Add' }} 11th Standard Student</h2>
     <a routerLink="/list-student" class="btn btn-primary"> View Students </a>
+  </div>
+
+  <!-- Student Data Loading Overlay -->
+  <div *ngIf="isLoadingStudent" class="loader-overlay">
+    <div class="loader-content">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading student data...</p>
+    </div>
   </div>
 
   <form [formGroup]="studentForm" (ngSubmit)="addStudent()">
@@ -10,8 +19,12 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <label class="form-label fw-bold">Student Name</label>
-
-        <input type="text" class="form-control" placeholder="Enter student name" formControlName="name" />
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Enter student name" 
+          formControlName="name"
+          [disabled]="isLoadingStudent" />
 
         <div class="text-danger mt-1" *ngIf="
             studentForm.get('name')?.touched && studentForm.get('name')?.invalid
@@ -19,46 +32,51 @@
           Name is required
         </div>
       </div>
+      
       <div class="col-md-4 mb-3">
-
         <div class="row mb-3">
-
           <label class="form-label fw-bold">Gender</label>
-
           <div class="d-flex gap-4">
-
             <div class="form-check">
-              <input class="form-check-input" type="radio" value="Male 👨" formControlName="gender" id="male">
-
+              <input 
+                class="form-check-input" 
+                type="radio" 
+                value="Male 👨" 
+                formControlName="gender" 
+                id="male"
+                [disabled]="isLoadingStudent" />
               <label class="form-check-label" for="male">
                 Male 👨
               </label>
             </div>
 
             <div class="form-check">
-              <input class="form-check-input" type="radio" value="Female 👩" formControlName="gender" id="female">
-
+              <input 
+                class="form-check-input" 
+                type="radio" 
+                value="Female 👩" 
+                formControlName="gender" 
+                id="female"
+                [disabled]="isLoadingStudent" />
               <label class="form-check-label" for="female">
                 Female 👩
               </label>
             </div>
-            <!-- Error message -->
+            
             <div class="text-danger mt-1"
               *ngIf="studentForm.get('gender')?.touched && studentForm.get('gender')?.invalid">
-
               Please select gender
-
             </div>
           </div>
-
         </div>
-
-
       </div>
+      
       <div class="col-md-4 mb-3">
         <label class="form-label fw-bold">Department</label>
-
-        <select class="form-select" formControlName="department">
+        <select 
+          class="form-select" 
+          formControlName="department"
+          [disabled]="isLoadingStudent">
           <option value="">Select Department</option>
           <option value="Science">Science</option>
           <option value="Commerce">Commerce</option>
@@ -74,19 +92,63 @@
       </div>
     </div>
 
-    <!-- DOB -->
+    <!-- DOB and Photo -->
     <div class="row">
-        <div class="col-md-4 mb-3">
+      <div class="col-md-4 mb-3">
         <label class="form-label fw-bold">Photo</label>
-        <!-- <input type="text" class="form-control" placeholder="Enter photo URL" formControlName="photo" /> -->
-       <input type="file" (change)="onFileChange($event)" />
-       <!-- Preview -->
-<img *ngIf="imagePreview" [src]="imagePreview" width="120" />
+        
+        <!-- Current Photo Display (for edit mode) -->
+        <div *ngIf="isEditMode && imagePreview && !selectedFile" class="mb-2">
+          <div class="alert alert-info p-2 mb-2">
+            <small class="text-muted">Current Photo:</small>
+          </div>
+          <img [src]="imagePreview" width="120" height="120" class="img-thumbnail mb-2" 
+               style="object-fit: cover;" />
+          <div class="small text-muted mt-1">
+            <i class="bi bi-info-circle"></i> Upload a new photo to replace
+          </div>
+        </div>
+        
+        <!-- File Input -->
+        <input 
+          type="file" 
+          (change)="onFileChange($event)" 
+          class="form-control"
+          [disabled]="isLoadingStudent || isSubmitting" />
+        
+        <!-- New Photo Preview -->
+        <div *ngIf="selectedFile && imagePreview" class="mt-2">
+          <div class="alert alert-success p-2 mb-2">
+            <small class="text-success">New Photo Preview:</small>
+          </div>
+          <img [src]="imagePreview" width="120" height="120" class="img-thumbnail" 
+               style="object-fit: cover;" />
+          <button 
+            type="button" 
+            class="btn btn-sm btn-outline-danger mt-2"
+            (click)="removeSelectedPhoto()">
+            Remove Selected Photo
+          </button>
+        </div>
+        
+        <!-- Option to remove photo in edit mode -->
+        <div *ngIf="isEditMode && studentPhoto && !selectedFile" class="mt-2">
+          <button 
+            type="button" 
+            class="btn btn-sm btn-outline-warning"
+            (click)="removeExistingPhoto()">
+            Remove Existing Photo
+          </button>
+        </div>
       </div>  
+      
       <div class="col-md-4 mb-3">
         <label class="form-label fw-bold">Date of Birth</label>
-
-        <input type="date" class="form-control" formControlName="dob" />
+        <input 
+          type="date" 
+          class="form-control" 
+          formControlName="dob"
+          [disabled]="isLoadingStudent" />
       </div>
 
       <div class="col-md-4 d-flex align-items-end">
@@ -96,66 +158,77 @@
       </div>
     </div>
 
+    <!-- Rest of your form remains the same -->
     <!-- Age Validation -->
     <div *ngIf="ageError" class="alert alert-danger">
       {{ ageError }}
     </div>
+    
     <!-- State & District -->
     <div class="row">
-
       <div class="col-md-4 mb-3">
         <label class="form-label fw-bold">State</label>
-
-        <select class="form-control" formControlName="stateId" [disabled]="!studentForm.get('stateId')?.value">
+        <select 
+          class="form-control" 
+          formControlName="stateId"
+          [disabled]="isLoadingStates || isLoadingStudent">
           <option value="">Select State</option>
           <option *ngFor="let state of states" [value]="state.id">
             {{state.name}}
           </option>
         </select>
+        
+        <div *ngIf="isLoadingStates" class="loader-text mt-1">
+          <small>Loading states...</small>
+        </div>
 
         <div class="text-danger" *ngIf="studentForm.get('stateId')?.touched && studentForm.get('stateId')?.invalid">
           State is required
         </div>
-
       </div>
 
       <div class="col-md-4 mb-3">
         <label class="form-label fw-bold">District</label>
-
-        <select class="form-control" formControlName="districtId">
+        <select 
+          class="form-control" 
+          formControlName="districtId"
+          [disabled]="isLoadingDistricts || isLoadingStudent">
           <option value="">Select District</option>
           <option *ngFor="let district of districts" [value]="district.id">
             {{district.name}}
           </option>
         </select>
+        
+        <div *ngIf="isLoadingDistricts" class="loader-text mt-1">
+          <small>Loading districts...</small>
+        </div>
 
         <div class="text-danger"
           *ngIf="studentForm.get('districtId')?.touched && studentForm.get('districtId')?.invalid">
           District is required
         </div>
-
       </div>
-
     </div>
+    
     <h4 class="mt-4 mb-3">Extracurricular Activities</h4>
 
     <div class="row">
       <div class="col-md-3" *ngFor="let activity of activitiesList">
-
         <div class="form-check">
-          <input class="form-check-input"
-           type="checkbox"
+          <input 
+            class="form-check-input"
+            type="checkbox"
             [value]="activity"
-             (change)="onActivityChange($event)"
-            [checked]="studentForm.value.activities?.includes(activity)" />
-
+            (change)="onActivityChange($event)"
+            [checked]="studentForm.value.activities?.includes(activity)"
+            [disabled]="isLoadingStudent" />
           <label class="form-check-label">
             {{activity}}
           </label>
         </div>
-
       </div>
     </div>
+    
     <!-- SUBJECT MARKS -->
     <h4 class="mt-4 mb-3">Subject Marks</h4>
 
@@ -163,8 +236,12 @@
       <div class="row">
         <div class="col-md-4 mb-3" *ngFor="let subject of subjects">
           <label class="form-label fw-bold">{{ subject }}</label>
-
-          <input type="number" class="form-control" [formControlName]="subject" placeholder="Marks out of 100" />
+          <input 
+            type="number" 
+            class="form-control" 
+            [formControlName]="subject" 
+            placeholder="Marks out of 100"
+            [disabled]="isLoadingStudent" />
           <div class="text-danger">
             <div *ngIf="
                 studentForm.get('subjects')?.get(subject)?.touched &&
@@ -189,6 +266,10 @@
       </div>
     </div>
 
+    <div *ngIf="!subjects.length && studentForm.get('department')?.value" class="alert alert-info">
+      Please select a department to view subjects
+    </div>
+
     <!-- RESULTS -->
     <div class="row mt-3">
       <div class="col-md-6">
@@ -206,11 +287,19 @@
 
     <!-- ACTION BUTTONS -->
     <div class="mt-4 d-flex gap-3">
-      <button type="submit" class="btn btn-success" [disabled]="studentForm.invalid || ageError">
-        {{ isEditMode ? "Update Student" : "Add Student" }}
+      <button 
+        type="submit" 
+        class="btn btn-success" 
+        [disabled]="studentForm.invalid || ageError || isSubmitting || isLoadingStudent">
+        <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        {{ isSubmitting ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? "Update Student" : "Add Student") }}
       </button>
 
-      <button type="button" class="btn btn-secondary px-4" routerLink="/list-student">
+      <button 
+        type="button" 
+        class="btn btn-secondary px-4" 
+        routerLink="/list-student"
+        [disabled]="isSubmitting">
         Cancel
       </button>
     </div>

@@ -31,9 +31,10 @@ export class AddStudentComponent {
   states: any[] = [];
   districts: any[] = [];
   genders: string[] = [];
-  studentPhoto: string= "";
+  studentPhoto: string = "";
   selectedFile!: File;
   imagePreview: string | ArrayBuffer | null = null;
+  allowed_formats: string[] = ["jpg", "png", "jpeg"];
   activitiesList: string[] = [
     'Sports',
     'Music',
@@ -73,6 +74,27 @@ export class AddStudentComponent {
   ageError: string = '';
   subjects: string[] = [];
 
+  // Loader flags
+  isLoadingStates = false;
+  isLoadingDistricts = false;
+  isLoadingStudent = false;
+  isSubmitting = false;
+
+  // Helper method to normalize gender with emoji
+  normalizeGenderWithEmoji(gender: string): string {
+    if (!gender) return '';
+    const cleanGender = gender.replace(/[👨👩]/g, '').trim();
+    if (cleanGender.toLowerCase() === 'male') return 'Male 👨';
+    if (cleanGender.toLowerCase() === 'female') return 'Female 👩';
+    return gender;
+  }
+
+  // Helper method to remove emoji from gender before sending to backend
+  genderWithoutEmoji(gender: string): string {
+    if (!gender) return '';
+    return gender.replace(/[👨👩]/g, '').trim();
+  }
+
   constructor(
     private fb: FormBuilder,
     private studentService: StudentService,
@@ -84,11 +106,10 @@ export class AddStudentComponent {
       name: ['', Validators.required],
       dob: ['', Validators.required],
       department: ['', Validators.required],
-      gender : ['', Validators.required],
+      gender: ['', Validators.required],
       stateId: ['', Validators.required],
       districtId: ['', Validators.required],
       activities: [[]], // multi select array
-     
     });
 
     // Marks calculation
@@ -106,28 +127,28 @@ export class AddStudentComponent {
       this.loadSubjects(dept);
     });
   }
+
   ngOnInit() {
     this.studentId = this.route.snapshot.paramMap.get('id');
 
     if (this.studentId) {
-      this.isEditMode = true; 
+      this.isEditMode = true;
     }
 
     this.loadStates();
 
     this.studentForm.get('stateId')?.valueChanges.subscribe((stateId) => {
-    
-
       // load districts for selected state
       if (stateId) {
         this.loadDistricts(stateId);
-          // reset district when state changes
-      this.studentForm.get('districtId')?.reset();
+        // reset district when state changes
+        this.studentForm.get('districtId')?.reset();
       } else {
         this.districts = [];
       }
     });
   }
+
   calculateMarks() {
     const subjects = this.studentForm.get('subjects')?.value;
 
@@ -137,12 +158,10 @@ export class AddStudentComponent {
 
     this.totalMarks = marks.reduce((sum, m) => sum + Number(m), 0);
 
-   this.percentage = Number(
-  ((this.totalMarks / (marks.length * 100)) * 100).toFixed(2)
-);
+    this.percentage = Number(
+      ((this.totalMarks / (marks.length * 100)) * 100).toFixed(2)
+    );
   }
-
-  // addStudent stays defined later to use the service
 
   calculateAge(dob: string) {
     const birthDate = new Date(dob);
@@ -166,7 +185,7 @@ export class AddStudentComponent {
     this.ageMonths = months;
     this.ageDays = days;
 
-    // ✅ AGE VALIDATION
+    // AGE VALIDATION
     if (years < 12) {
       this.ageError = 'Student age must be more than 12 years';
     } else if (years > 20) {
@@ -198,117 +217,229 @@ export class AddStudentComponent {
     this.studentForm.addControl('subjects', this.fb.group(subjectControls));
   }
 
-loadStates() {
-  this.studentService.getStates().subscribe((res: any) => {
-    this.states = res;
+  loadStates() {
+    this.isLoadingStates = true;
+    this.studentService.getStates().subscribe({
+      next: (res: any) => {
+        this.states = res;
+        this.isLoadingStates = false;
 
-    // If edit mode, load districts after states arrive
-    if (this.isEditMode && this.studentId) {
-      this.loadStudent(this.studentId);
-    }
-  });
-}
-onFileChange(event: any) {
-  const file = event.target.files[0];
-
-  if (file) {
-    this.selectedFile = file;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result;
-    };
-
-    reader.readAsDataURL(file);
-  }
-}
-addStudent() {
-  if (this.studentForm.invalid || this.ageError) {
-    this.studentForm.markAllAsTouched();
-    return;
-  }
-
-  const formData = new FormData();
-
-  formData.append("name", this.studentForm.value.name);
-  formData.append("dob", this.studentForm.value.dob);
-  formData.append("department", this.studentForm.value.department);
-  formData.append("gender", this.studentForm.value.gender);
-  formData.append("stateId", this.studentForm.value.stateId);
-  formData.append("districtId", this.studentForm.value.districtId);
-
-  formData.append(
-    "activities",
-    JSON.stringify(this.studentForm.value.activities)
-  );
-  formData.append(
-    "subjects",
-    JSON.stringify(this.studentForm.value.subjects)
-  );
-
-  formData.append(
-    "age",
-    `${this.ageYears}Y ${this.ageMonths}M ${this.ageDays}D`
-  );
-  formData.append("totalMarks", this.totalMarks.toString());
-  formData.append("percentage", this.percentage.toString());
-
-  // ✅ IMAGE HANDLING (IMPORTANT FIX)
-  if (this.selectedFile) {
-    // new image selected
-    formData.append("photo", this.selectedFile);
-  } else if (this.isEditMode && this.studentPhoto) {
-    // keep old image
-    formData.append("photo", this.studentPhoto);
-  }
-
-  if (this.isEditMode) {
-    this.studentService.updateStudent(this.studentId!, formData)
-      .subscribe(() => {
-        this.popupService.show('Student updated successfully', 'success');
-        this.router.navigate(['/list-student']);
-      });
-  } else {
-    this.studentService.addStudent(formData)
-      .subscribe(() => {
-        this.popupService.show('Student added successfully', 'success');
-        this.router.navigate(['/list-student']);
-      });
-  }
-}
-
-loadStudent(id: string) {
-
-  this.studentService.getStudentById(id).subscribe((student: any) => {
-
-    this.studentForm.patchValue({
-      name: student.name,
-      dob: student.dob,
-      department: student.department,
-      gender: student.gender,
-  stateId: Number(student.stateId),
-     districtId: Number(student.districtId),
-      activities: student.activities
-    });
-
-    this.loadSubjects(student.department);
-
-    setTimeout(() => {
-      this.studentForm.get('subjects')?.patchValue(student.subjects);
-    }, 400);
-
-    this.loadDistricts(student.stateId);
-
-    this.studentPhoto = student.photo || [];
-
-  });
-
-}
-  loadDistricts(stateId: any) {
-    const selectedState = this.states.find((state) => state.id == stateId);
-
-    this.districts = selectedState ? selectedState.districts : [];
+        // If edit mode, load districts after states arrive
+        if (this.isEditMode && this.studentId) {
+          this.loadStudent(this.studentId);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading states:', error);
+        this.isLoadingStates = false;
+        this.popupService.show('Failed to load states', 'error');
       }
+    });
+  }
+
+  loadStudent(id: string) {
+    this.isLoadingStudent = true;
+    this.studentService.getStudentById(id).subscribe({
+      next: (student: any) => {
+        this.studentForm.patchValue({
+          name: student.name,
+          dob: student.dob,
+          department: student.department,
+          gender: this.normalizeGenderWithEmoji(student.gender),
+          stateId: Number(student.stateId),
+          districtId: Number(student.districtId),
+          activities: student.activities
+        });
+
+        this.loadSubjects(student.department);
+
+        setTimeout(() => {
+          this.studentForm.get('subjects')?.patchValue(student.subjects);
+        }, 400);
+
+        this.loadDistricts(student.stateId);
+
+        // ✅ Store existing photo
+        this.studentPhoto = student.photo || '';
+        
+        // ✅ Set image preview if photo exists
+        if (this.studentPhoto) {
+          // Check if it's a full URL or just a filename
+          if (this.studentPhoto.startsWith('http')) {
+            this.imagePreview = this.studentPhoto;
+          } else if (this.studentPhoto.startsWith('data:')) {
+            // If it's base64 string
+            this.imagePreview = this.studentPhoto;
+          } else {
+            // Assuming your backend serves images from a specific endpoint
+            this.imagePreview = `https://student-backend-0mnt.onrender.com/uploads/${this.studentPhoto}`;
+          }
+        } else {
+          this.imagePreview = null;
+        }
+        
+        this.isLoadingStudent = false;
+      },
+      error: (error) => {
+        console.error('Error loading student:', error);
+        this.isLoadingStudent = false;
+        this.popupService.show('Failed to load student data', 'error');
+      }
+    });
+  }
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+
+    if (file) {
+      // Get file extension and convert to lowercase
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+
+      // Check if file format is allowed
+      if (!fileExtension || !this.allowed_formats.includes(fileExtension)) {
+        this.popupService.show(
+          `Invalid file format. Allowed formats: ${this.allowed_formats.join(', ').toUpperCase()}`,
+          'error'
+        );
+        event.target.value = ''; // Clear the file input
+        this.selectedFile = null as any;
+        return;
+      }
+
+      this.selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      // If file selection is cleared, keep the existing photo
+      if (this.isEditMode && this.studentPhoto) {
+        if (this.studentPhoto.startsWith('http')) {
+          this.imagePreview = this.studentPhoto;
+        } else if (this.studentPhoto.startsWith('data:')) {
+          this.imagePreview = this.studentPhoto;
+        } else {
+          this.imagePreview = `https://student-backend-0mnt.onrender.com/uploads/${this.studentPhoto}`;
+        }
+      } else {
+        this.imagePreview = null;
+      }
+    }
+  }
+
+  removeSelectedPhoto() {
+    this.selectedFile = null as any;
+    if (this.isEditMode && this.studentPhoto) {
+      // Restore existing photo preview
+      if (this.studentPhoto.startsWith('http')) {
+        this.imagePreview = this.studentPhoto;
+      } else if (this.studentPhoto.startsWith('data:')) {
+        this.imagePreview = this.studentPhoto;
+      } else {
+        this.imagePreview = `https://student-backend-0mnt.onrender.com/uploads/${this.studentPhoto}`;
+      }
+    } else {
+      this.imagePreview = null;
+    }
+  }
+
+  removeExistingPhoto() {
+    this.studentPhoto = '';
+    this.imagePreview = null;
+    this.selectedFile = null as any;
+    this.popupService.show('Existing photo will be removed on update', 'info');
+  }
+
+  addStudent() {
+    if (this.studentForm.invalid || this.ageError) {
+      this.studentForm.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    const formData = new FormData();
+
+    formData.append("name", this.studentForm.value.name);
+    formData.append("dob", this.studentForm.value.dob);
+    formData.append("department", this.studentForm.value.department);
+    formData.append("gender", this.genderWithoutEmoji(this.studentForm.value.gender));
+    formData.append("stateId", this.studentForm.value.stateId);
+    formData.append("districtId", this.studentForm.value.districtId);
+
+    formData.append(
+      "activities",
+      JSON.stringify(this.studentForm.value.activities)
+    );
+    formData.append(
+      "subjects",
+      JSON.stringify(this.studentForm.value.subjects)
+    );
+
+    formData.append(
+      "age",
+      `${this.ageYears}Y ${this.ageMonths}M ${this.ageDays}D`
+    );
+    formData.append("totalMarks", this.totalMarks.toString());
+    formData.append("percentage", this.percentage.toString());
+
+    // ✅ Enhanced IMAGE HANDLING
+    if (this.selectedFile) {
+      // New image selected
+      formData.append("photo", this.selectedFile);
+    } else if (this.isEditMode && this.studentPhoto) {
+      // Keep existing image
+      formData.append("photo", this.studentPhoto);
+    } else if (this.isEditMode && !this.studentPhoto && this.imagePreview === null) {
+      // Photo was removed
+      formData.append("removePhoto", "true");
+    }
+
+    if (this.isEditMode) {
+      this.studentService.updateStudent(this.studentId!, formData)
+        .subscribe({
+          next: () => {
+            this.isSubmitting = false;
+            this.popupService.show('Student updated successfully', 'success');
+            this.router.navigate(['/list-student']);
+          },
+          error: (error) => {
+            this.isSubmitting = false;
+            console.error('Error updating student:', error);
+            this.popupService.show('Failed to update student', 'error');
+          }
+        });
+    } else {
+      this.studentService.addStudent(formData)
+        .subscribe({
+          next: () => {
+            this.isSubmitting = false;
+            this.popupService.show('Student added successfully', 'success');
+            this.router.navigate(['/list-student']);
+          },
+          error: (error) => {
+            this.isSubmitting = false;
+            console.error('Error adding student:', error);
+            this.popupService.show('Failed to add student', 'error');
+          }
+        });
+    }
+  }
+
+  loadDistricts(stateId: any) {
+    this.isLoadingDistricts = true;
+    const selectedState = this.states.find((state) => state.id == stateId);
+    
+    // Simulate loading delay or actual API call
+    setTimeout(() => {
+      this.districts = selectedState ? selectedState.districts : [];
+      this.isLoadingDistricts = false;
+    }, 300);
+  }
+
   onActivityChange(event: any) {
     const selectedActivities = this.studentForm.value.activities || [];
 
@@ -325,16 +456,4 @@ loadStudent(id: string) {
       activities: selectedActivities,
     });
   }
- 
-
-
 }
-
-
-// 1️⃣ Grade System -done
-// 2️⃣ Dashboard Cards - 
-// 3️⃣ Photo Upload - done
-// 4️⃣ Excel Export
-// 5️⃣ Charts
-// 6️⃣ Pagination
-// 7️⃣ 

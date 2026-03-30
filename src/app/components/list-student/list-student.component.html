@@ -1,247 +1,288 @@
 <div class="container mt-4">
-    <!-- Title -->
-    <div class="col-md-2">
-        <h3 class="mb-0">Student List</h3>
+    <!-- Loader Overlay -->
+    <div *ngIf="isLoadingStudents" class="loader-overlay">
+        <div class="loader-content">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 mb-0">Loading students...</p>
+        </div>
     </div>
+
+    <!-- Title -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Student List</h3>
+        <div *ngIf="!isLoadingStudents && students.length === 0" class="text-muted">
+            No students found
+        </div>
+    </div>
+
     <!-- Header Row -->
-    <div class="row align-items-center mb-3">
-
-
+    <div class="row align-items-center mb-3" *ngIf="!isLoadingStudents || students.length > 0">
 
         <!-- Search -->
         <div class="col-md-2">
             <input type="text" class="form-control" placeholder="Search student..." [(ngModel)]="searchText"
-                (input)="applyFilters(); updateQueryParams()" />
+                (input)="applyFilters(); updateQueryParams()" [disabled]="isLoadingStudents" />
         </div>
 
         <!-- Department Dropdown -->
         <div class="col-md-3">
             <div class="dropdown w-100">
-
                 <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button"
-                    data-bs-toggle="dropdown">
-
+                    data-bs-toggle="dropdown" [disabled]="isLoadingStudents">
                     <ng-container *ngIf="selectedDepartments.length; else allDept">
-
                         <span *ngFor="let dept of selectedDepartments" class="badge bg-primary me-1">
                             {{ dept }}
-                            <span class="ms-1 cursor-pointer"
-                                (click)="removeDepartment(dept); $event.stopPropagation()">
+                            <span class="ms-1 cursor-pointer" (click)="removeDepartment(dept); $event.stopPropagation()">
                                 ✖
                             </span>
                         </span>
-
                     </ng-container>
-
                     <ng-template #allDept>
                         All Departments
                     </ng-template>
-
                 </button>
-
                 <ul class="dropdown-menu w-100 p-2">
-
                     <li>
                         <label class="dropdown-item">
                             <input type="checkbox" value="Science" [checked]="selectedDepartments.includes('Science')"
-                                (change)="onDepartmentChange($event)">
+                                (change)="onDepartmentChange($event)" [disabled]="isLoadingStudents">
                             Science
                         </label>
                     </li>
-
                     <li>
                         <label class="dropdown-item">
                             <input type="checkbox" value="Commerce" [checked]="selectedDepartments.includes('Commerce')"
-                                (change)="onDepartmentChange($event)">
+                                (change)="onDepartmentChange($event)" [disabled]="isLoadingStudents">
                             Commerce
                         </label>
                     </li>
-
                     <li>
                         <label class="dropdown-item">
                             <input type="checkbox" value="Arts" [checked]="selectedDepartments.includes('Arts')"
-                                (change)="onDepartmentChange($event)">
+                                (change)="onDepartmentChange($event)" [disabled]="isLoadingStudents">
                             Arts
                         </label>
                     </li>
-
                 </ul>
-
             </div>
         </div>
 
         <!-- Status Toggle -->
         <div class="col-md-4">
             <div class="btn-group w-100">
-
                 <button class="btn" [ngClass]="!statusFilter ? 'btn-secondary' : 'btn-outline-secondary'"
-                    (click)="statusFilter=''; applyFilters(); updateQueryParams()">
+                    (click)="statusFilter=''; applyFilters(); updateQueryParams()" [disabled]="isLoadingStudents">
                     All
                 </button>
-
                 <button class="btn" [ngClass]="statusFilter === 'PASS' ? 'btn-success' : 'btn-outline-success'"
-                    (click)="statusFilter = statusFilter === 'PASS' ? '' : 'PASS'; applyFilters(); updateQueryParams()">
+                    (click)="statusFilter = statusFilter === 'PASS' ? '' : 'PASS'; applyFilters(); updateQueryParams()" [disabled]="isLoadingStudents">
                     PASS <span *ngIf="statusFilter === 'PASS'"> ✖</span>
                 </button>
-
                 <button class="btn" [ngClass]="statusFilter === 'ATKT' ? 'btn-warning' : 'btn-outline-warning'"
-                    (click)="statusFilter = statusFilter === 'ATKT' ? '' : 'ATKT'; applyFilters(); updateQueryParams()">
+                    (click)="statusFilter = statusFilter === 'ATKT' ? '' : 'ATKT'; applyFilters(); updateQueryParams()" [disabled]="isLoadingStudents">
                     ATKT <span *ngIf="statusFilter === 'ATKT'"> ✖</span>
                 </button>
-
                 <button class="btn" [ngClass]="statusFilter === 'FAIL' ? 'btn-danger' : 'btn-outline-danger'"
-                    (click)="statusFilter = statusFilter === 'FAIL' ? '' : 'FAIL'; applyFilters(); updateQueryParams()">
+                    (click)="statusFilter = statusFilter === 'FAIL' ? '' : 'FAIL'; applyFilters(); updateQueryParams()" [disabled]="isLoadingStudents">
                     FAIL <span *ngIf="statusFilter === 'FAIL'"> ✖</span>
                 </button>
-
             </div>
         </div>
 
         <!-- Actions -->
         <div class="col-md-3 d-flex gap-2">
-
-            <button class="btn btn-success flex-fill" (click)="exportToExcel()">
-                📤 Export
+            <button class="btn btn-success flex-fill" (click)="exportToExcel()" 
+                    [disabled]="isExporting || isLoadingStudents || filteredStudents.length === 0">
+                <span *ngIf="isExporting" class="spinner-border spinner-border-sm me-1"></span>
+                {{ isExporting ? 'Exporting...' : '📤 Export' }}
             </button>
 
-            <a routerLink="/add-student" class="btn btn-primary flex-fill">
+            <a routerLink="/add-student" class="btn btn-primary flex-fill" 
+               [class.disabled]="isLoadingStudents">
                 + Add
             </a>
 
             <!-- Clear All -->
-            <button *ngIf="selectedDepartments.length || statusFilter || searchText" class="btn btn-outline-danger"
-                (click)="clearAllFilters()"> <i class="bi bi-funnel-fill me-1"></i>
+            <button *ngIf="selectedDepartments.length || statusFilter || searchText" 
+                    class="btn btn-outline-danger" 
+                    (click)="clearAllFilters()" 
+                    [disabled]="isLoadingStudents">
+                <i class="bi bi-funnel-fill me-1"></i>
                 Clear Filters
-
             </button>
-
         </div>
+    </div>
 
+    <!-- Loading Skeleton -->
+    <div *ngIf="isLoadingStudents" class="skeleton-loader">
+        <div class="skeleton-table">
+            <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]">
+                <div class="skeleton-cell" *ngFor="let j of [1,2,3,4,5,6,7,8,9,10]"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Table -->
-    <table class="table table-bordered table-striped text-center" [ngClass]="{'details-open': selectedStudentId}">
-
-        <thead class="table-dark">
-            <tr>
-                <th>Sr. No.</th>
-                 
+    <div *ngIf="!isLoadingStudents && students.length > 0">
+        <table class="table table-bordered table-striped text-center" [ngClass]="{'details-open': selectedStudentId}">
+            <thead class="table-dark">
+                <tr>
+                    <th>Sr. No.</th>
                     <th (click)="sortStudents('name')" style="cursor:pointer">
-  Name {{ getSortIcon('name') }}
-</th>
-                <th>Profile</th>
-                <th>Gender</th>
-                <th>Department</th>
-                <th (click)="sortStudents('age')" style="cursor:pointer">Age {{getSortIcon('age')}}</th>
-                <th>Total Marks</th>
-                <th>Percentage</th>
-                <th>Grade</th>
-                <th>Status</th>
-                <th colspan="2">Address</th>
-                <th colspan="3">Activities</th>
-                <th colspan="2">Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <ng-container *ngFor="let student of paginatedStudents; let i = index">
-
-                <tr [ngClass]="{'selected-student': selectedStudentId === student._id}">
-                    <td>{{i + 1}}</td>
-
-                    <td>
-                        <a [routerLink]="['/student', student._id]" class="fw-semibold text-decoration-none">
-                            {{student.name}} {{getMedal(student)}}
-                        </a>
-                    </td>
-
-                    <td>
-                        <img [src]="getStudentPhoto(student)" width="40" height="40" class="rounded-circle border" />
-                    </td>
-
-                    <td>{{student.gender || '❗ Update'}}</td>
-                    <td>{{student.department}}</td>
-                    <td>{{student.age}}</td>
-
-                    <td (click)="toggleDetails(student)" class="text-primary fw-bold cursor-pointer">
-                        {{student.totalMarks}} / 600
-                    </td>
-
-                    <td>{{ student.percentage | number:'1.2-2' }} %</td>
-
-                    <td>{{ getGrade(student.percentage) }}</td>
-
-                    <td>
-                        <span class="badge bg-success" *ngIf="getStudentStatus(student)=='PASS'">PASS</span>
-                        <span class="badge bg-warning text-dark" *ngIf="getStudentStatus(student)=='ATKT'">ATKT</span>
-                        <span class="badge bg-danger" *ngIf="getStudentStatus(student)=='FAIL'">FAIL</span>
-                    </td>
-
-                    <td colspan="2">{{ getAddress(student) }}</td>
-
-                  <td colspan="3"> <ng-container *ngIf="student.activities?.length; else noActivities"> <span class="badge bg-success me-1" *ngFor="let act of student.activities"> {{ act }} </span> </ng-container> <ng-template #noActivities> <span class="text-muted">No Activities</span> </ng-template> </td>
-
-                    <td>
-                        <a class="btn btn-primary btn-sm" [routerLink]="['/edit-student', student._id]">Edit</a>
-                    </td>
-
-                    <td>
-                        <button class="btn btn-danger btn-sm" (click)="deleteStudent(student._id)">Delete</button>
-                    </td>
-
+                        Name {{ getSortIcon('name') }}
+                    </th>
+                    <th>Profile</th>
+                    <th>Gender</th>
+                    <th>Department</th>
+                    <th (click)="sortStudents('age')" style="cursor:pointer">
+                        Age {{getSortIcon('age')}}
+                    </th>
+                    <th>Total Marks</th>
+                    <th (click)="sortStudents('percentage')" style="cursor:pointer">
+                        Percentage {{getSortIcon('percentage')}}
+                    </th>
+                    <th>Grade</th>
+                    <th>Status</th>
+                    <th colspan="2">Address</th>
+                    <th colspan="3">Activities</th>
+                    <th colspan="2">Actions</th>
                 </tr>
+            </thead>
 
-                <!-- Subject-wise marks details row -->
-                <tr *ngIf="selectedStudentId === student._id" class="table-light">
-                    <td colspan="16" class="p-0">
-                        <div class="p-3 border-start border-primary border-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-primary mb-0">📚 Subject-wise Marks</h6>
-                                <button class="btn btn-sm btn-outline-secondary" (click)="toggleDetails(student)">
-                                    <i class="bi bi-x-lg"></i> Close
-                                </button>
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-md-6 col-lg-4" *ngFor="let subject of getSubjectKeys(student)">
-                                    <div class="card h-100 border-0 shadow-sm">
-                                        <div class="card-body text-center">
-                                            <h6 class="card-title text-muted mb-2">{{ subject }}</h6>
-                                            <div class="display-6 fw-bold text-primary">{{ student.subjects[subject] }}/100</div>
-                                            <div class="progress mt-2" style="height: 8px;">
-                                                <div class="progress-bar"
-                                                     [ngClass]="getProgressBarClass(student.subjects[subject])"
-                                                     [style.width.%]="student.subjects[subject]">
+            <tbody>
+                <ng-container *ngFor="let student of paginatedStudents; let i = index">
+                    <tr [ngClass]="{'selected-student': selectedStudentId === student._id}">
+                        <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+                        <td>
+                            <a [routerLink]="['/student', student._id]" class="fw-semibold text-decoration-none">
+                                {{student.name}} {{getMedal(student)}}
+                            </a>
+                        </td>
+                        <td>
+                            <img [src]="getStudentPhoto(student)" width="40" height="40" class="rounded-circle border" />
+                        </td>
+                        <td>{{student.gender || '❗ Update'}}</td>
+                        <td>{{student.department}}</td>
+                        <td>{{student.age}}</td>
+                        <td (click)="toggleDetails(student)" class="text-primary fw-bold cursor-pointer">
+                            {{student.totalMarks}} / 600
+                        </td>
+                        <td>{{ student.percentage | number:'1.2-2' }} %</td>
+                        <td>{{ getGrade(student.percentage) }}</td>
+                        <td>
+                            <span class="badge bg-success" *ngIf="getStudentStatus(student)=='PASS'">PASS</span>
+                            <span class="badge bg-warning text-dark" *ngIf="getStudentStatus(student)=='ATKT'">ATKT</span>
+                            <span class="badge bg-danger" *ngIf="getStudentStatus(student)=='FAIL'">FAIL</span>
+                        </td>
+                        <td colspan="2">{{ getAddress(student) }}</td>
+                        <td colspan="3">
+                            <ng-container *ngIf="student.activities?.length; else noActivities">
+                                <span class="badge bg-success me-1" *ngFor="let act of student.activities">
+                                    {{ act }}
+                                </span>
+                            </ng-container>
+                            <ng-template #noActivities>
+                                <span class="text-muted">No Activities</span>
+                            </ng-template>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" [routerLink]="['/edit-student', student._id]">Edit</a>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" (click)="deleteStudent(student._id)" 
+                                    [disabled]="isDeleting">
+                                <span *ngIf="isDeleting" class="spinner-border spinner-border-sm me-1"></span>
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Subject-wise marks details row -->
+                    <tr *ngIf="selectedStudentId === student._id" class="table-light">
+                        <td colspan="16" class="p-0">
+                            <div class="p-3 border-start border-primary border-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="text-primary mb-0">📚 Subject-wise Marks</h6>
+                                    <button class="btn btn-sm btn-outline-secondary" (click)="toggleDetails(student)">
+                                        <i class="bi bi-x-lg"></i> Close
+                                    </button>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-6 col-lg-4" *ngFor="let subject of getSubjectKeys(student)">
+                                        <div class="card h-100 border-0 shadow-sm">
+                                            <div class="card-body text-center">
+                                                <h6 class="card-title text-muted mb-2">{{ subject }}</h6>
+                                                <div class="display-6 fw-bold text-primary">{{ student.subjects[subject] }}/100</div>
+                                                <div class="progress mt-2" style="height: 8px;">
+                                                    <div class="progress-bar"
+                                                         [ngClass]="getProgressBarClass(student.subjects[subject])"
+                                                         [style.width.%]="student.subjects[subject]">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
 
-            </ng-container>
-        </tbody>
+        <!-- Pagination -->
+        <nav class="d-flex justify-content-between align-items-center mt-3">
+            <ul class="pagination mb-0">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <button class="page-link" (click)="prevPage()" [disabled]="isLoadingStudents">«</button>
+                </li>
+                <li class="page-item" *ngFor="let page of getPages()" [class.active]="currentPage === page">
+                    <button class="page-link" (click)="goToPage(page)" [disabled]="isLoadingStudents">
+                        {{ page }}
+                    </button>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <button class="page-link" (click)="nextPage()" [disabled]="isLoadingStudents">»</button>
+                </li>
+            </ul>
+            <span class="small text-muted">
+                Showing {{getStartRecord()}}–{{getEndRecord()}} of {{filteredStudents.length}} students
+            </span>
+            <div class="d-flex align-items-center gap-2">
+                <label class="mb-0 small">Show</label>
+                <select class="form-select form-select-sm page-size-dropdown" [value]="itemsPerPage"
+                    (change)="changePageSize($event)" [disabled]="isLoadingStudents">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+                <span class="small">students</span>
+            </div>
+        </nav>
+    </div>
 
-    </table>
-    <nav class="d-flex justify-content-between align-items-center mt-3"> <!-- Pagination -->
-        <ul class="pagination mb-0"> <!-- Previous -->
-            <li class="page-item" [class.disabled]="currentPage === 1"> <button class="page-link"
-                    (click)="prevPage()">«</button> </li> <!-- Page Numbers -->
-            <li class="page-item" *ngFor="let page of getPages()" [class.active]="currentPage === page"> <button
-                    class="page-link" (click)="goToPage(page)"> {{ page }} </button> </li> <!-- Next -->
-            <li class="page-item" [class.disabled]="currentPage === totalPages"> <button class="page-link"
-                    (click)="nextPage()">»</button> </li>
-        </ul> <span class="small text-muted"> Showing {{getStartRecord()}}–{{getEndRecord()}} of
-            {{filteredStudents.length}} students </span> <!-- Show Entries Dropdown -->
-        <div class="d-flex align-items-center gap-2"> <label class="mb-0 small">Show</label> <select
-                class="form-select form-select-sm page-size-dropdown" [value]="itemsPerPage"
-                (change)="changePageSize($event)">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-            </select> <span class="small">students</span> </div>
-    </nav>
+    <!-- Empty State -->
+    <div *ngIf="!isLoadingStudents && students.length === 0" class="text-center py-5">
+        <div class="alert alert-info">
+            <h5>No students found</h5>
+            <p>Click the "Add Student" button to add your first student.</p>
+            <a routerLink="/add-student" class="btn btn-primary mt-2">
+                + Add Student
+            </a>
+        </div>
+    </div>
+
+    <!-- No Results State -->
+    <div *ngIf="!isLoadingStudents && students.length > 0 && filteredStudents.length === 0" class="text-center py-5">
+        <div class="alert alert-warning">
+            <h5>No matching students found</h5>
+            <p>Try adjusting your filters or search criteria.</p>
+            <button class="btn btn-outline-primary" (click)="clearAllFilters()">
+                Clear All Filters
+            </button>
+        </div>
+    </div>
 </div>
